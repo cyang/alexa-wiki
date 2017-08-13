@@ -1,2 +1,2 @@
-BeautifulSoup==3.2.1
-urllib2==1498656401.94
+beautifulsoup4==4.6.0
+bs4==0.0.1

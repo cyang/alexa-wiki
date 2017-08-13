@@ -9,7 +9,7 @@ http://amzn.to/1LGWsLG
 
 from __future__ import print_function
 from bs4 import BeautifulSoup
-from urllib2 import Request, urlopen, URLError, HTTPError
+from urllib2 import Request, urlopen, HTTPError, URLError
 
 WIKI_URL = "https://en.wikipedia.org/wiki/"
 
@@ -47,8 +47,9 @@ def lambda_handler(event, context):
 def on_session_started(session_started_request, session):
     """ Called when the session starts """
 
-    print("on_session_started requestId=" + session_started_request['requestId']
-          + ", sessionId=" + session['sessionId'])
+    print("on_session_started requestId=" + \
+            session_started_request['requestId'] + \
+            ", sessionId=" + session['sessionId'])
 
 
 def on_launch(launch_request, session):
@@ -56,7 +57,7 @@ def on_launch(launch_request, session):
     want
     """
 
-    print("on_launch requestId=" + launch_request['requestId'] +
+    print("on_launch requestId=" + launch_request['requestId'] + \
           ", sessionId=" + session['sessionId'])
     # Dispatch to your skill's launch
     return get_welcome_response()
@@ -65,7 +66,7 @@ def on_launch(launch_request, session):
 def on_intent(intent_request, session):
     """ Called when the user specifies an intent for this skill """
 
-    print("on_intent requestId=" + intent_request['requestId'] +
+    print("on_intent requestId=" + intent_request['requestId'] + \
           ", sessionId=" + session['sessionId'])
 
     intent = intent_request['intent']
@@ -88,7 +89,7 @@ def on_session_ended(session_ended_request, session):
 
     Is not called when the skill returns should_end_session=true
     """
-    print("on_session_ended requestId=" + session_ended_request['requestId'] +
+    print("on_session_ended requestId=" + session_ended_request['requestId'] + \
           ", sessionId=" + session['sessionId'])
     # add cleanup logic here
 
@@ -109,12 +110,12 @@ def get_welcome_response():
     reprompt_text = SAMPLE_PROMPT
 
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response(
+    return build_response(session_attributes, build_speechlet_response( \
         card_title, speech_output, reprompt_text, should_end_session))
 
 def get_halt_response():
     """Stops skill"""
-    return build_response({}, build_speechlet_response(
+    return build_response({}, build_speechlet_response( \
         SKILL_NAME + " skill has been canceled", "", "", True))
 
 def get_wiki_summary(intent, session):
@@ -128,7 +129,9 @@ def get_wiki_summary(intent, session):
 
         req = WIKI_URL + topic.replace(" ", "_")
         try:
+            print("Opening url " + req)
             response = urlopen(req)
+            print("Opened url " + req)
         except HTTPError as e:
             speech_output = 'The server couldn\'t fulfill the request. '
             speech_output += "Please try again."
@@ -142,7 +145,9 @@ def get_wiki_summary(intent, session):
         else:
             # everything is fine
             soup = BeautifulSoup(response, 'html.parser')
-            speech_ouput = soup.find("div", {"class" : 'mw-parser-output'}).find("p", recursive=False).get_text())
+            print("Opened soup")
+            speech_output = soup.find("div", {"class" : 'mw-parser-output'}).find("p", recursive=False).get_text()
+            print("Parsed soup")
             reprompt_text = ""
 
             should_end_session = True;
