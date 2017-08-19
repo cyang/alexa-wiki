@@ -10,6 +10,7 @@ http://amzn.to/1LGWsLG
 from __future__ import print_function
 from bs4 import BeautifulSoup
 from urllib2 import Request, urlopen, HTTPError, URLError
+import re
 
 WIKI_URL = "https://en.wikipedia.org/wiki/"
 
@@ -119,13 +120,21 @@ def get_halt_response():
         SKILL_NAME + " skill has been canceled", "", "", True))
 
 def get_wiki_summary(intent, session):
-    card_title = SKILL_NAME + " Intent"
+    card_title = SKILL_NAME
     session_attributes = {}
     should_end_session = False
 
     if 'topic' in intent['slots']:
         slots = intent['slots']
         topic = slots['topic']['value']
+        card_title += " for " + topic
+        
+        if topic == "":
+            speech_output = 'Topic is empty. '
+            speech_output += "Please try again."
+            reprompt_text = SAMPLE_PROMPT
+
+            return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
         req = WIKI_URL + topic.replace(" ", "_")
         try:
@@ -146,8 +155,16 @@ def get_wiki_summary(intent, session):
             # everything is fine
             soup = BeautifulSoup(response, 'html.parser')
             print("Opened soup")
-            speech_output = soup.find("div", {"class" : 'mw-parser-output'}).find("p", recursive=False).get_text()
+            speech_output = soup.find("div", {"class" :
+                'mw-parser-output'}).find("p",
+                        recursive=False).get_text()
             print("Parsed soup")
+            # Clean up output
+            speech_output = re.sub(r'/.+?/', '', speech_output)
+            speech_output = re.sub(r'\(.+?\)', '', speech_output)
+            speech_output = re.sub(r'\{.+?\}', '', speech_output)
+            speech_output = re.sub(r'\[.+?\]', '', speech_output)
+            speech_output.replace('\\', '')
             reprompt_text = ""
 
             should_end_session = True;
@@ -188,3 +205,4 @@ def build_response(session_attributes, speechlet_response):
         'sessionAttributes': session_attributes,
         'response': speechlet_response
     }
+

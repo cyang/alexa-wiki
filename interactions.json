@@ -1,0 +1,59 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "topic",
+          "type": "LITERAL",
+          "samples": [
+            "{topic}"
+          ]
+        }
+      ],
+      "intent": "getWikiSummaryIntent"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "Elicit.Intent-getWikiSummaryIntent.IntentSlot-topic",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "What is the topic?"
+        }
+      ]
+    }
+  ],
+  "dialog": {
+    "version": "1.0",
+    "intents": [
+      {
+        "name": "getWikiSummaryIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "topic",
+            "type": "LITERAL",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-getWikiSummaryIntent.IntentSlot-topic"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
