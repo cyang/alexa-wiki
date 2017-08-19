@@ -13,10 +13,7 @@
       "slots": [
         {
           "name": "topic",
-          "type": "LITERAL",
-          "samples": [
-            "{topic}"
-          ]
+          "type": "LITERAL"
         }
       ],
       "intent": "getWikiSummaryIntent"
