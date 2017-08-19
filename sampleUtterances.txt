@@ -1,0 +1,9 @@
+getWikiSummaryIntent get wiki summary for {donald trump|topic}
+getWikiSummaryIntent get summary for {sushi|topic}
+getWikiSummaryIntent define {central park|topic}
+getWikiSummaryIntent what is {world war two|topic}
+getWikiSummaryIntent who is {the declaration of independence|topic}
+getWikiSummaryIntent look up {distributed artificial intelligence|topic}
+getWikiSummaryIntent look for {pizza rolls|topic}
+getWikiSummaryIntent search for {pizza|topic}
+getWikiSummaryIntent search {computer science|topic}
