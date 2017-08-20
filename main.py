@@ -126,7 +126,15 @@ def get_wiki_summary(intent, session):
 
     if 'topic' in intent['slots']:
         slots = intent['slots']
-        topic = slots['topic']['value']
+        try:
+            topic = slots['topic']['value']
+        except KeyError, e:
+            print('Key error - reason "%s"' % str(e))
+            speech_output = "Please try again. With a non-empty or valid topic"
+            reprompt_text = SAMPLE_PROMPT
+            return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+
+
         card_title += " for " + topic
         
         if topic == "":
